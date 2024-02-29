@@ -1,0 +1,9 @@
+.wrapper{
+    margin-bottom: 20px;
+}
+
+.wrapper img{
+	display: inline-block;
+    width: 100%;
+	height: auto;
+}

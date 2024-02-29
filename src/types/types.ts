@@ -1,36 +1,52 @@
-interface UserLinks {
-    self: string;
+interface PhotoLinks {
+    download: string;
+    download_location: string;
     html: string;
-    photos: string;
-    likes: string;
-    portfolio: string;
-    following: string;
-    followers: string;
+    self: string;
 }
 
 interface UserProfileImage {
-    small: string;
-    medium: string;
     large: string;
+    medium: string;
+    small: string;
+}
+
+interface SocialLinks {
+    instagram_username: string;
+    paypal_email: string | null;
+    portfolio_url: string;
+    twitter_username: string;
 }
 
 interface User {
-    id: string;
-    updated_at: string;
-    username: string;
-    name: string;
-    first_name: string;
-    last_name: string;
-    twitter_username: string;
-    portfolio_url: string;
+    accepted_tos: boolean;
     bio: string;
-    location: string;
-    links: UserLinks;
-    profile_image: UserProfileImage;
-    total_collections: number;
+    first_name: string;
+    for_hire: boolean;
+    id: string;
     instagram_username: string;
+    last_name: string | null;
+    links: {
+        followers: string;
+        following: string;
+        html: string;
+        likes: string;
+        photos: string;
+        portfolio: string;
+        self: string;
+    };
+    location: string;
+    name: string;
+    portfolio_url: string;
+    profile_image: UserProfileImage;
+    social: SocialLinks;
+    total_collections: number;
     total_likes: number;
     total_photos: number;
+    total_promoted_photos: number;
+    twitter_username: string;
+    updated_at: string;
+    username: string;
 }
 
 interface Location {
@@ -43,40 +59,35 @@ interface Location {
     };
 }
 
-interface ExifData {
-    make: string;
-    model: string;
-    exposure_time: string;
-    aperture: string;
-    focal_length: string;
-    iso: number;
-}
-
 export interface UnsplashPhoto {
-    id: string;
-    created_at: string;
-    updated_at: string;
-    width: number;
-    height: number;
+    alt_description: string;
+    blur_hash: string;
+    breadcrumbs: any[]; 
     color: string;
+    created_at: string;
+    current_user_collections: any[]; 
+    description: string;
+    height: number;
+    id: string;
+    liked_by_user: boolean;
     likes: number;
-    user: User;
+    links: PhotoLinks;
+    promoted_at: string | null;
+    slug: string;
+    sponsorship: any; 
+    tagline: string;
+    tagline_url: string;
+    topic_submissions: any; 
+    updated_at: string;
     urls: {
-        raw: string;
         full: string;
+        raw: string;
         regular: string;
         small: string;
+        small_s3: string;
         thumb: string;
     };
-    links: {
-        self: string;
-        html: string;
-        download: string;
-        download_location: string;
-    };
+    user: User;
+    width: number;
     location: Location;
-    exif: ExifData;
-    views: number;
-    downloads: number;
 }
-

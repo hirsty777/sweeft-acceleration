@@ -1,14 +1,16 @@
 import { UnsplashPhoto } from "../types/types"
+import Style from "../styles/components/ImagesList.module.css"
+
 
 interface ImagesListI {
     data:UnsplashPhoto 
 }
 
 function ImagesList({data}:ImagesListI){
-    console.log(data)
+
     return (
-        <div>
-            
+        <div className={Style.wrapper}>
+            <img src={data.urls.regular} alt={data.alt_description} />
         </div>
     )
 }

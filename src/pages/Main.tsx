@@ -1,38 +1,50 @@
-import { useCallback, useEffect, useState } from "react"
+import {useEffect, useRef, useState} from "react"
 import NavBar from "../layouts/NavBar"
 import ImagesList from "../components/ImagesList"
-import { UnsplashPhoto } from "../types/types"
+import Style from "../styles/pages/Main.module.css"
+import useGetPopularImg from "../hooks/useGetPopularImg"
+
 
 function Main() {
-    const [imagesData, setImagesData] = useState<[] | UnsplashPhoto[]>([])
+    const [currnetPage, setCurrentPage] = useState(1)
+    const {response, loading, error} = useGetPopularImg(currnetPage)
+    const pageRef = useRef(null)
+    const obsElRef = useRef(null)
 
-    //temporary fix to avoid api call limit
     useEffect(() => {
-        fetchedData()
-    }, [])
-    //temporary fix to avoid api call limit
-    const fetchedData = useCallback(async ()=>{
-            try {
-                const res = await fetch(`https://api.unsplash.com/photos?order_by=popular`,{
-                    headers:{
-                        'Accept-Version': 'v1',
-                        // "Content-Type": "application/json",
-                        'Authorization': 'Client-ID yKccNFh-g4wyhVcH6MKCdkQfGufBadM8s82fQw2UJDM'
-                    }
-                })
-                const data = await res.json()
-                setImagesData(data)
-            } catch (error) {
-                console.log(error)
+        console.log("evnt")
+        const handleScroll = () => {
+            if(window.innerHeight+window.scrollY >= document.body.offsetHeight){
+                setCurrentPage(prev => prev + 1)
             }
-    },[])
+        }
+
+        window.addEventListener("scroll", handleScroll)
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll)
+        }
+        
+    },[loading])
+
     
+    if(loading){ 
+        return <h1>loading..</h1>
+    }
+    
+    if(error){ 
+        return <h1>something went wrong</h1>
+    }
+
     return (
-        <div>
+        <div className={Style.wrapper} ref={pageRef}>
             <NavBar />
-            {imagesData.map((imageObj) => (
-                <ImagesList key={imageObj.id} data={imageObj} />
-            ))} 
+            <div className={Style["images-box"]}>
+                {response && response.map((imageObj) => (
+                    <ImagesList key={imageObj.id} data={imageObj} />
+                ))} 
+            </div>
+            <div className={Style["observer-elemnt"]} ref={obsElRef}></div>
         </div>
     )
 }
