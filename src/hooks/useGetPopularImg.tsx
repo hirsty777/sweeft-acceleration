@@ -22,7 +22,7 @@ function useGetPopularImg(currnetPage:number) {
                 })
                 const data = await res.json()
                 setLoading(false)
-                setResponse((prev) => [...prev, ...data])
+                setResponse(data)
             } catch (error) {
                 setLoading(false)
                 setError(true)

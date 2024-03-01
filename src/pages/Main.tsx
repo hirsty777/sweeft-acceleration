@@ -3,13 +3,14 @@ import NavBar from "../layouts/NavBar"
 import ImagesList from "../components/ImagesList"
 import Style from "../styles/pages/Main.module.css"
 import useGetPopularImg from "../hooks/useGetPopularImg"
+import { UnsplashPhoto } from "../types/types"
 
 
 function Main() {
     const [currnetPage, setCurrentPage] = useState(1)
     const {response, loading, error} = useGetPopularImg(currnetPage)
+    const [data, setData] = useState<[] | UnsplashPhoto[]>([])
     const pageRef = useRef(null)
-    const obsElRef = useRef(null)
 
     useEffect(() => {
         console.log("evnt")
@@ -27,10 +28,10 @@ function Main() {
         
     },[loading])
 
-    
-    if(loading){ 
-        return <h1>loading..</h1>
-    }
+    useEffect(()=>{
+        if(response) setData(prev => [...prev, ...response])
+    },[response])
+
     
     if(error){ 
         return <h1>something went wrong</h1>
@@ -40,11 +41,11 @@ function Main() {
         <div className={Style.wrapper} ref={pageRef}>
             <NavBar />
             <div className={Style["images-box"]}>
-                {response && response.map((imageObj) => (
+                {data && data.map((imageObj) => (
                     <ImagesList key={imageObj.id} data={imageObj} />
                 ))} 
             </div>
-            <div className={Style["observer-elemnt"]} ref={obsElRef}></div>
+            {loading && <h1>loading...</h1>}
         </div>
     )
 }
