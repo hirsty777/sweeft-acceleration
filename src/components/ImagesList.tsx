@@ -10,7 +10,7 @@ interface ImagesListI {
 function ImagesList({data}:ImagesListI){
     const imageCardRef = useRef<null | HTMLDivElement>(null)
     
-
+    //so we give random span(height to grid elemnt to make it look masonry), we use useEffect to prevent span change(when parent Main gets new data and triger rerender)
     useEffect(()=>{ 
         if(imageCardRef.current){
             imageCardRef.current.style.gridRow = `span ${ (Math.random()*2+1).toFixed() }`

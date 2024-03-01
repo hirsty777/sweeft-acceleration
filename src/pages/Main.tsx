@@ -4,33 +4,41 @@ import ImagesList from "../components/ImagesList"
 import Style from "../styles/pages/Main.module.css"
 import useGetPopularImg from "../hooks/useGetPopularImg"
 import { UnsplashPhoto } from "../types/types"
+import useSearchPhoto from "../hooks/useSearchPhoto"
+import useScrollEvent from "../hooks/useScrollEvent"
+import Loader from "../layouts/Loader"
 
 
 function Main() {
-    const [currnetPage, setCurrentPage] = useState(1)
-    const {response, loading, error} = useGetPopularImg(currnetPage)
+    const [activePage, setActivePage] = useState("main")
+    const {currnetPage} = useScrollEvent()
+    const [searchRes, setSearchRes] = useState<string>('')
+
+    const {response, loading, error} = useGetPopularImg(activePage === "main" ? currnetPage : 0)
+    const {searchResponse} = useSearchPhoto(activePage === "search" ? {currnetPage,searchRes} : {})
+
     const [data, setData] = useState<[] | UnsplashPhoto[]>([])
     const pageRef = useRef(null)
 
-    useEffect(() => {
-        console.log("evnt")
-        const handleScroll = () => {
-            if(window.innerHeight+window.scrollY >= document.body.offsetHeight){
-                setCurrentPage(prev => prev + 1)
-            }
-        }
-
-        window.addEventListener("scroll", handleScroll)
-
-        return () => {
-            window.removeEventListener("scroll", handleScroll)
-        }
+    console.log("main page render")
+    useEffect(()=>{
+        if(response) setData(() => [...response])
         
-    },[loading])
+    },[response])
 
     useEffect(()=>{
-        if(response) setData(prev => [...prev, ...response])
-    },[response])
+        if(searchResponse) setData(() => [...searchResponse])
+        
+    },[searchResponse])
+
+    const handleSearchResult = (value:string) => {
+        setActivePage("search")
+        setSearchRes(value)
+    }
+
+    const handleMainPageLod = () => {
+        setActivePage("main")
+    }
 
     
     if(error){ 
@@ -39,13 +47,13 @@ function Main() {
 
     return (
         <div className={Style.wrapper} ref={pageRef}>
-            <NavBar />
+            <NavBar displaySearch={true} handleSearch={handleSearchResult} handleMainPageLod={handleMainPageLod}/>
             <div className={Style["images-box"]}>
                 {data && data.map((imageObj) => (
                     <ImagesList key={imageObj.id} data={imageObj} />
                 ))} 
             </div>
-            {loading && <h1>loading...</h1>}
+            {loading && <Loader />}
         </div>
     )
 }

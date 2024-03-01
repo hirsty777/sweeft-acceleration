@@ -9,6 +9,11 @@ function useGetPopularImg(currnetPage:number) {
     const [error, setError] = useState<boolean>(false)
 
     useEffect(() => {
+        if(currnetPage === 0){
+            setResponse([]) // if currentpage returns 0 it means we arenot using this hook anymore so we cleare responsedata and return
+            return
+        }
+
         const fetchData = async () => {
             console.log("api call")
             setLoading(true)
@@ -22,7 +27,7 @@ function useGetPopularImg(currnetPage:number) {
                 })
                 const data = await res.json()
                 setLoading(false)
-                setResponse(data)
+                setResponse(prev => [...prev, ...data])
             } catch (error) {
                 setLoading(false)
                 setError(true)

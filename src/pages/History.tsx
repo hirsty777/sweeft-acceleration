@@ -3,7 +3,7 @@ import NavBar from "../layouts/NavBar"
 function History() {
   return (
     <div>
-        <NavBar />
+        <NavBar displaySearch={false}/>
     </div>
   )
 }
