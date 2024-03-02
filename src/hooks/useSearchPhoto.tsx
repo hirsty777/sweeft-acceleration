@@ -9,6 +9,7 @@ interface useSearchPhotoI {
 
 function useSearchPhoto({currnetPage=1, searchRes=""}:useSearchPhotoI) {
     const [searchResponse, setSearchResponse] = useState<[] | UnsplashPhoto[]>([])
+    const [loadingSearch, setLoadingSearch] = useState<boolean>(false)
     const [searchError, setsearchError] = useState<boolean>(false)
     const quryWrodRef = useRef('')
 
@@ -20,6 +21,7 @@ function useSearchPhoto({currnetPage=1, searchRes=""}:useSearchPhotoI) {
         if(quryWrodRef.current.length<=0) return
 
         const fetchData = async () => {
+            setLoadingSearch(true)
             try {
                 const res = await fetch(`https://api.unsplash.com/search/photos?order_by=popular&page=${currnetPage}&per_page=20&query=${quryWrodRef.current}`,{
                     headers:{
@@ -29,8 +31,10 @@ function useSearchPhoto({currnetPage=1, searchRes=""}:useSearchPhotoI) {
                     }
                 })
                 const data = await res.json()
+                setLoadingSearch(false)
                 setSearchResponse(prev => [...prev, ...data.results])
             } catch (error) {
+                setLoadingSearch(false)
                 setsearchError(true)
             }
         }
@@ -39,7 +43,7 @@ function useSearchPhoto({currnetPage=1, searchRes=""}:useSearchPhotoI) {
 
     },[currnetPage, searchRes])
 
-    return {searchResponse}
+    return {searchResponse, loadingSearch}
 }
 
 export default useSearchPhoto

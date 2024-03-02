@@ -5,7 +5,7 @@ import { UnsplashPhoto } from '../types/types'
 
 function useGetPopularImg(currnetPage:number) {
     const [response, setResponse] = useState<[] | UnsplashPhoto[]>([])
-    const [loading, setLoading] = useState<boolean>(true)
+    const [loadingPopular, setLoadingPopular] = useState<boolean>(false)
     const [error, setError] = useState<boolean>(false)
 
     useEffect(() => {
@@ -16,7 +16,7 @@ function useGetPopularImg(currnetPage:number) {
 
         const fetchData = async () => {
             console.log("api call")
-            setLoading(true)
+            setLoadingPopular(true)
             try {
                 const res = await fetch(`https://api.unsplash.com/photos?order_by=popular&page=${currnetPage}&per_page=20`,{
                     headers:{
@@ -26,10 +26,10 @@ function useGetPopularImg(currnetPage:number) {
                     }
                 })
                 const data = await res.json()
-                setLoading(false)
+                setLoadingPopular(false)
                 setResponse(prev => [...prev, ...data])
             } catch (error) {
-                setLoading(false)
+                setLoadingPopular(false)
                 setError(true)
             }
         }
@@ -38,7 +38,7 @@ function useGetPopularImg(currnetPage:number) {
 
     },[currnetPage])
 
-    return {response, loading, error}
+    return {response, loadingPopular, error}
 
 }
 

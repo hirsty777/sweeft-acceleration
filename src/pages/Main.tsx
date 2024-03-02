@@ -14,11 +14,12 @@ function Main() {
     const {currnetPage} = useScrollEvent()
     const [searchRes, setSearchRes] = useState<string>('')
 
-    const {response, loading, error} = useGetPopularImg(activePage === "main" ? currnetPage : 0)
-    const {searchResponse} = useSearchPhoto(activePage === "search" ? {currnetPage,searchRes} : {})
+    const {response, loadingPopular, error} = useGetPopularImg(activePage === "main" ? currnetPage : 0)
+    const {searchResponse, loadingSearch} = useSearchPhoto(activePage === "search" ? {currnetPage,searchRes} : {})
 
     const [data, setData] = useState<[] | UnsplashPhoto[]>([])
     const pageRef = useRef(null)
+    const [imageIsRedering, setImageIsRedering] = useState(true)
 
     console.log("main page render")
     useEffect(()=>{
@@ -51,9 +52,9 @@ function Main() {
             <div className={Style["images-box"]}>
                 {data && data.map((imageObj) => (
                     <ImagesList key={imageObj.id} data={imageObj} />
-                ))} 
+                ))}
             </div>
-            {loading && <Loader />}
+            {(loadingPopular || loadingSearch)  && <Loader />} {/*if any of loading state(from popularimages fetch or searchedimages fetch) is true we shod loader*/}
         </div>
     )
 }
