@@ -1,12 +1,13 @@
 import { UnsplashPhoto } from "../types/types"
 import Style from "../styles/components/ImagesList.module.css"
 import { useEffect, useRef, useState } from "react"
-import { Blurhash, BlurhashCanvas } from "react-blurhash"
+import { Blurhash} from "react-blurhash"
 
 
 interface ImagesListI {
     data:UnsplashPhoto 
 }
+
 
 function ImagesList({data}:ImagesListI){
     const [imageIsLoaded, setImageIsLoaded] = useState(false)
@@ -19,14 +20,13 @@ function ImagesList({data}:ImagesListI){
             imageCardRef.current.style.gridRow = `span ${ (Math.random()*2+1).toFixed() }`
         }
     },[])
-
+    
     const handleImaleLoaded = () => {
         setImageIsLoaded(true)
     }
 
     return (
-
-        <div className={Style.wrapper} ref={imageCardRef} style={{backgroundColor:`${imageIsLoaded? "none" : "red"}`}}>
+        <div className={Style.wrapper} ref={imageCardRef}>
             {!imageIsLoaded && <Blurhash hash={data.blur_hash} width="100%" height="100%" resolutionX={62} resolutionY={62} punch={1} />}
             <img src={data.urls.regular} alt={data.alt_description} onLoad={handleImaleLoaded} style={{visibility:`${imageIsLoaded? "visible" : "hidden"}`}}/>
         </div>

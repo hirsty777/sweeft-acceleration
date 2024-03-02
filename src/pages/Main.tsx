@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react"
+import {useContext, useEffect, useRef, useState} from "react"
 import NavBar from "../layouts/NavBar"
 import ImagesList from "../components/ImagesList"
 import Style from "../styles/pages/Main.module.css"
@@ -7,48 +7,34 @@ import { UnsplashPhoto } from "../types/types"
 import useSearchPhoto from "../hooks/useSearchPhoto"
 import useScrollEvent from "../hooks/useScrollEvent"
 import Loader from "../layouts/Loader"
+import { Context } from "../context/Context"
 
 
 function Main() {
-    const [activePage, setActivePage] = useState("main")
-    const {currnetPage} = useScrollEvent()
-    const [searchRes, setSearchRes] = useState<string>('')
+    const { usingSearch, searchWord, handleStatusChange, onSearchWrodChange } = useContext(Context)
+    const {currnetPage} = useScrollEvent({usingSearch,  searchWord}) //this properties customhook uses for dependency(so if they change we set currentpage to 1)
 
-    const {response, loadingPopular, error} = useGetPopularImg(activePage === "main" ? currnetPage : 0)
-    const {searchResponse, loadingSearch} = useSearchPhoto(activePage === "search" ? {currnetPage,searchRes} : {})
+    const {response, loadingPopular, error} = useGetPopularImg(usingSearch === false ? currnetPage : 0)
+    const {searchResponse, loadingSearch} = useSearchPhoto(usingSearch === true ? {currnetPage, searchWord} : {})
 
     const [data, setData] = useState<[] | UnsplashPhoto[]>([])
     const pageRef = useRef(null)
-    const [imageIsRedering, setImageIsRedering] = useState(true)
 
-    console.log("main page render")
     useEffect(()=>{
         if(response) setData(() => [...response])
-        
     },[response])
 
     useEffect(()=>{
         if(searchResponse) setData(() => [...searchResponse])
-        
     },[searchResponse])
 
-    const handleSearchResult = (value:string) => {
-        setActivePage("search")
-        setSearchRes(value)
-    }
-
-    const handleMainPageLod = () => {
-        setActivePage("main")
-    }
-
-    
     if(error){ 
         return <h1>something went wrong</h1>
     }
-
+    
     return (
         <div className={Style.wrapper} ref={pageRef}>
-            <NavBar displaySearch={true} handleSearch={handleSearchResult} handleMainPageLod={handleMainPageLod}/>
+            <NavBar displaySearch={true} />
             <div className={Style["images-box"]}>
                 {data && data.map((imageObj) => (
                     <ImagesList key={imageObj.id} data={imageObj} />
