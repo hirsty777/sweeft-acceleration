@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useRef, useState } from "react";
 
 export const Context = createContext<any>(null);
 
@@ -20,7 +20,8 @@ const ContextProvider = ({children}:any) => {
         setSearchWord(val)
     }
 
-    return <Context.Provider value={{history, usingSearch, searchWord,  handleStatusChange, handleHistoryChange, onSearchWrodChange}}>
+
+    return <Context.Provider value={{history, usingSearch, searchWord, handleStatusChange, handleHistoryChange, onSearchWrodChange}}>
         {children}
     </Context.Provider>
 }

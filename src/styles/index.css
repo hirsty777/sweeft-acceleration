@@ -1,6 +1,10 @@
 /* here ve use global styles*/
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
+:root{
+  --main-bc-1:rgb(0, 0, 0);
+}
+
 *,*::after,*::before{
   margin: 0;
   padding: 0;
@@ -17,4 +21,5 @@ body{
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   font-style: normal;
+  background-color: rgb(17, 15, 15);
 }

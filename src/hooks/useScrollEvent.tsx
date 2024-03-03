@@ -1,28 +1,19 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 
 interface useScrollEventI {
     usingSearch:boolean,
-    searchWord:string
+    searchWord:string,
+    isFetching:boolean
 }
 
-function useScrollEvent({usingSearch, searchWord}:useScrollEventI) {
+function useScrollEvent({usingSearch, searchWord, isFetching}:useScrollEventI) {
     const [currnetPage, setCurrentPage] = useState(1)
-    const deterrentRef = useRef(false)
 
     useEffect(() => {
-        setCurrentPage(1)
-
         const handleScroll = () => {
-            //deterrentRef.current we use it to slow down currentpage increment(by 1sec) so when user reaches bottom new data have some time to load before user scrolls to bottom again
-            if(deterrentRef.current === true) return
-            
-            if(window.innerHeight+window.scrollY >= document.body.offsetHeight){
+            //deterrentRef.current we use it to slow down currentpage increment(by 1sec) so when user reaches bottom new data have some time to load before user scrolls to bottom again            
+            if(window.innerHeight+window.scrollY >= document.body.offsetHeight && !isFetching){
                 setCurrentPage(prev => prev + 1)
-                deterrentRef.current = true
-
-                setTimeout(()=>{
-                    deterrentRef.current = false
-                },1000)
             }
         }
         window.addEventListener("scroll", handleScroll)
@@ -31,7 +22,12 @@ function useScrollEvent({usingSearch, searchWord}:useScrollEventI) {
             window.removeEventListener("scroll", handleScroll)
         }
         
-    },[usingSearch, searchWord]) // in dependency we use this 2 property to know if user is changing search or going back to mainpage after search so we start this logic from new
+    },[isFetching])
+
+    useEffect(() => {
+        setCurrentPage(1) // if useeffect get recalled we start from 1 
+    },[usingSearch, searchWord])
+
 
     return {currnetPage}
 }
