@@ -11,7 +11,6 @@ const customCache:any = {}
 function useSearchPhoto({currnetPage, searchWord=""}:useSearchPhotoI) {
     const [searchResponse, setSearchResponse] = useState<[] | UnsplashPhoto[]>([])
     const [loadingSearch, setLoadingSearch] = useState<boolean>(false)
-    const [searchError, setsearchError] = useState<boolean>(false)
     const quryWrodRef = useRef('')
 
     useEffect(() => {
@@ -43,7 +42,7 @@ function useSearchPhoto({currnetPage, searchWord=""}:useSearchPhotoI) {
                     customCache[url] = uniqueData
                     setSearchResponse(prev => [...prev, ...uniqueData])
                 } catch (error) {
-                    setsearchError(true)
+                    console.log("error")
                 } finally{
                     setLoadingSearch(false)
                 }

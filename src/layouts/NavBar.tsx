@@ -10,7 +10,6 @@ interface NavBarI{
 
 function NavBar({displaySearch}:NavBarI) {
     const { history,  handleHistoryChange, handleStatusChange, onSearchWrodChange} = useContext(Context)
-
     const inputRef = useRef<HTMLInputElement | null>(null)
 
     const handleKey:React.KeyboardEventHandler<HTMLInputElement> = (event) => {

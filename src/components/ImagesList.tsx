@@ -60,7 +60,7 @@ function ImagesList({data}:ImagesListI){
 
     return (
         <div className={Style.wrapper} ref={imageCardRef}>
-            {!imageIsLoaded && <Blurhash hash={data.blur_hash} width="100%" height="100%" resolutionX={62} resolutionY={62} punch={1} />}
+            {!imageIsLoaded && <Blurhash hash={data.blur_hash} width="100%" height="100%" resolutionX={62} resolutionY={62} punch={1} />} {/*if image is ot loaded show Blurhash*/}
             <img 
             className={Style["list-image"]}
                 src={data.urls.regular} 
@@ -70,7 +70,7 @@ function ImagesList({data}:ImagesListI){
                 onClick={shoModal}
             />
             {imageStats && <div className={Style["modal-box"]} ref={modalBoxRef} onClick={() => setImageStats(null)}>
-                                {!modalImgLoaded && <ModalLOader />}
+                                {!modalImgLoaded && <ModalLOader />} {/*if image is ot loaded show loader*/}
                                 <img src={data.urls.full} 
                                     alt={data.description}  
                                     className={Style["modal-box-image"]} 
