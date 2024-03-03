@@ -1,11 +1,50 @@
 .wrapper{
     margin-bottom: 20px;
+    cursor: pointer;
 }
 
 
-.wrapper img{
+.list-image{
     width: 100%;
 	height: 100%;
     object-fit: cover;
+}
+
+.modal-box{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 30px 10px;
+
+    cursor: pointer;
+    background-color: var(--main-bc-1);
+}
+    .modal-box-image{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+.stats-box{
+    position: fixed;
+    bottom: 30px;
+    width: 100%;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.548);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 30px;
+}
+.stats{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 10px;
+    color: rgb(255, 255, 255);
 }
 
